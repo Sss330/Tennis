@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/played-matches")
+@WebServlet("/matches")
 public class PlayedMatchesServlet extends HttpServlet {
 
     @Override
