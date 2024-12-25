@@ -1,25 +1,45 @@
 package dao;
 
+import lombok.Getter;
 import model.Player;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import utils.HibernateUtil;
 
-public class PlayerDao {
+import java.util.List;
 
-    private void savePlayer (){
+@Getter
+public class PlayerDao implements CrudTennisDao<Player> {
+
+
+    public Player findByName(String name) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Player> query = session.createQuery("from Player where name = :name", Player.class);
+            query.setParameter("name", name);
+            return query.uniqueResult();
+        }
 
     }
 
-    private Player getPlayer(){
 
-        //поменять нулл
-        return null;
+    @Override
+    public void save(Player player) {
+        try (SessionFactory sessionFactory = HibernateUtil.getSessionFactory(); Session session = sessionFactory.openSession()) {
+
+            session.save(player);
+            session.getTransaction().commit();
+        }
     }
 
-    private void updatePlayer (){
+    @Override
+    public List<Player> findAll() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-    }
+            Query<Player> query = session.createQuery("from Player", Player.class);
 
-    private void deletePlayer (){
-
+            return query.getResultList();
+        }
     }
 
 }

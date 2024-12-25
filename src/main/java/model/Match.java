@@ -1,7 +1,7 @@
 package model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+        import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,12 +18,15 @@ public class Match {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Player player1;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Player player2;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Player winner;
 
 }

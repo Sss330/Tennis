@@ -1,54 +1,60 @@
 package dao;
 
 import model.Match;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import utils.HibernateUtil;
 
 import java.util.List;
 
-public class MatchDao implements crudTennisDao<Match>{
+public class MatchDao implements CrudTennisDao<Match> {
 
 
-
-    private Match getMatch(){
-
-        return null;
-    }
-
-    private void updateMatch (){
-
-
-    }
-
-    private void deleteMatch(){
-
-
-    }
-
-
-    @Override
-    public void add(Match match) {
-
-        try(SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session session = sessionFactory.openSession()) {
+    public Match getMatchByPlayers(String name) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
 
-            match = match.builder()
-                    .player1(match.getPlayer1())
-                    .player2(match.getPlayer2())
-                    .winner(match.getWinner())
-                    .build();
+            Query<Match> query = session.createQuery("FROM Match m WHERE m.player1.name = :player1Name AND m.player2.name = :player2Name", Match.class);
+
+            query.setParameter("name", name);
+
+            Match match = query.uniqueResult();
+
+            session.getTransaction().commit();
+            return match;
+
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
+    public void save(Match match) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            session.beginTransaction();
 
             session.save(match);
-            session.getTransaction().commit();
-        }
 
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     @Override
     public List<Match> findAll() {
-        return List.of();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+
+            Query<Match> query = session.createQuery("FROM Match", Match.class);
+            List<Match> allMatches = query.getResultList();
+
+            session.getTransaction().commit();
+            return allMatches;
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 }
