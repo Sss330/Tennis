@@ -1,6 +1,6 @@
 package dao;
 
-import model.Match;
+import model.entity.Match;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import utils.HibernateUtil;

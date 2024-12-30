@@ -1,7 +1,6 @@
 package service;
 
 public enum ScorePointsService {
-
     ONE,
     TWO,
     THREE,

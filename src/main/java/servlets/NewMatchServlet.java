@@ -16,7 +16,7 @@ import java.util.UUID;
 @WebServlet("/new-match")
 public class NewMatchServlet extends HttpServlet {
 
-    //OngoingMatchesService ongoingMatchesService
+    OngoingMatchesService ongoingMatchesService = new OngoingMatchesService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -37,12 +37,10 @@ public class NewMatchServlet extends HttpServlet {
             return;
         }
 
-
         UUID uuidOfMatch = UUID.randomUUID();
 
+        ongoingMatchesService.saveMatch(uuidOfMatch, ongoingMatchesService.getMatchScoreWithPlayers(firstPlayer, secondPlayer));
 
-        // ongoingMatchesService.saveMatch(uuidOfMatch,ongoingMatchesService.getCurrentMatchWithPlayers(firstPlayer,secondPlayer));
-
-        resp.sendRedirect("pages/match-score.jsp?uuid=" + uuidOfMatch);
+        resp.sendRedirect("pages/match-score.jsp?uuid=" + uuidOfMatch );
     }
 }

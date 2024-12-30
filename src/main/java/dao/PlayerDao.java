@@ -1,7 +1,7 @@
 package dao;
 
 import lombok.Getter;
-import model.Player;
+import model.entity.Player;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
