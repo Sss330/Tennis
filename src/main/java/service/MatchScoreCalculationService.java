@@ -116,6 +116,7 @@ public class MatchScoreCalculationService {
         int setsFirstPlayer = matchScore.getScoreFirstPlayer().getSets();
         int setsSecondPlayer = matchScore.getScoreSecondPlayer().getSets();
 
+
         return setsFirstPlayer == 2 || setsSecondPlayer == 2;
     }
 }
