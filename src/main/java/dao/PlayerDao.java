@@ -19,20 +19,12 @@ public class PlayerDao implements CrudTennisDao<Player> {
             query.setParameter("name", name);
             return query.uniqueResult();
         }
-
     }
-
-    public Player findOrSavePlayer (String name){
-
-
-
-        return null;
-    }
-
 
     @Override
     public void save(Player player) {
-        try (SessionFactory sessionFactory = HibernateUtil.getSessionFactory(); Session session = sessionFactory.openSession()) {
+        try (SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+             Session session = sessionFactory.openSession()) {
 
             session.save(player);
             session.getTransaction().commit();

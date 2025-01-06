@@ -13,4 +13,6 @@ public class Score {
     int points;
     int games;
     int sets;
+    boolean advantage;
+    boolean tieBreak;
 }

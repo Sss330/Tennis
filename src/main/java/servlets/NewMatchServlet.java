@@ -27,8 +27,8 @@ public class NewMatchServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
-        String firstPlayer = req.getParameter("player-1");
-        String secondPlayer = req.getParameter("player-2");
+        String firstPlayer = req.getParameter("playerOne");
+        String secondPlayer = req.getParameter("playerTwo");
 
 
         if (firstPlayer == null || secondPlayer == null || firstPlayer.equals(secondPlayer)) {
@@ -41,6 +41,6 @@ public class NewMatchServlet extends HttpServlet {
 
         ongoingMatchesService.saveMatch(uuidOfMatch, ongoingMatchesService.getMatchScoreWithPlayers(firstPlayer, secondPlayer));
 
-        resp.sendRedirect("pages/match-score.jsp?uuid=" + uuidOfMatch );
+        resp.sendRedirect("pages/match-score.jsp?uuid=" + uuidOfMatch);
     }
 }

@@ -14,7 +14,7 @@ public class MatchDao implements CrudTennisDao<Match> {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
 
-            Query<Match> query = session.createQuery("FROM Match m WHERE m.player1.name = :player1Name AND m.player2.name = :player2Name", Match.class);
+            Query<Match> query = session.createQuery("FROM Match m WHERE m.player1.name = :name OR m.player2.name = :name", Match.class);
 
             query.setParameter("name", name);
 

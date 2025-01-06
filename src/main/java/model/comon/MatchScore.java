@@ -18,7 +18,3 @@ public class MatchScore {
     private Score scoreSecondPlayer;
 
 }
-
-//идея
-//  new firstPlayer(points: 15, games: 4, sets: 1);
-//  new secondPlayer(points: 15, games: 4, sets: 1);

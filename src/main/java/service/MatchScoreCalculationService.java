@@ -1,86 +1,121 @@
 package service;
 
-import dao.PlayerDao;
+
 import model.comon.MatchScore;
 import model.comon.Score;
 
-
 public class MatchScoreCalculationService {
 
-    PlayerDao playerDao = new PlayerDao();
 
-    //todo надо увеличить кол во очков у того кто выйграл очко
+    //todo поменять магические числа на константы
+    //todo поменять иф элсы на свитч кейсы
+
     public void winServe(MatchScore matchScore, long servedPlayerId) {
 
-        //todo: матч заканчивается если игрок набивает  2 сета (((1 сет = 6 геймов) 1 гейм = 40 поинтов ) 1 winServe = 15, 30, 40 )
-
-        //todo надо увеличить кол во очков у того кто выйграл очко
-
-
-        Score firstPlayerScore = matchScore.getScoreFirstPlayer();
-
-        int firstPlayersPoints = firstPlayerScore.getPoints();
-
-
-        Score secondPlayerScore = matchScore.getScoreSecondPlayer();
-
-        int secondPlayersPoints = secondPlayerScore.getPoints();
-
-
+        if (isMatchOver(matchScore)) {
+            return;
+        }
+        countScore(matchScore, servedPlayerId);
     }
-
 
     private void countScore(MatchScore score, long servedPlayerId) {
 
-        Score winnerServeScore = score.getScoreFirstPlayer();
-        Score loserServeScore = score.getScoreFirstPlayer();
+        Score winnerScore;
+        Score loserScore;
 
-        int points = winnerServeScore.getPoints();
-        int games = winnerServeScore.getGames();
-        int sets = winnerServeScore.getSets();
+        if (score.getFirstPlayerId() == servedPlayerId) {
 
-        long firstPlayerId = score.getFirstPlayerId();
-        long secondPlayerId = score.getFirstPlayerId();
+            winnerScore = score.getScoreFirstPlayer();
+            loserScore = score.getScoreSecondPlayer();
 
+        } else {
 
-        if (points == 0) {
+            winnerScore = score.getScoreSecondPlayer();
+            loserScore = score.getScoreFirstPlayer();
 
-            winnerServeScore.setPoints(15);
+        }
 
-        } else if (points == 15) {
+        int pointsWinner = winnerScore.getPoints();
 
-            winnerServeScore.setPoints(30);
+        int pointsLoser = loserScore.getPoints();
 
-        } else if (points == 30) {
+        int gamesWinner = winnerScore.getGames();
 
-            winnerServeScore.setPoints(40);
+        int gamesLoser = loserScore.getGames();
 
-        } else if (points == 40) {
-
-            winnerServeScore.setPoints(0);
-            winnerServeScore.setGames(++games);
-
-        } else if (firstPlayerId == servedPlayerId) {
+        int setsWinner = winnerScore.getSets();
 
 
+        if (pointsWinner == 0) {
 
-        } else if (true) {
-            
+            winnerScore.setPoints(15);
+
+        } else if (pointsWinner == 15) {
+
+            winnerScore.setPoints(30);
+
+        } else if (pointsWinner == 30) {
+
+            winnerScore.setPoints(40);
+
+        } else if (pointsWinner == 40 && pointsLoser == 40) {
+
+            if (winnerScore.isAdvantage()) {
+
+                winnerScore.setPoints(0);
+                loserScore.setPoints(0);
+                winnerScore.setAdvantage(false);
+                winnerScore.setGames(++gamesWinner);
+
+            } else {
+
+                winnerScore.setAdvantage(true);
+                loserScore.setAdvantage(false);
+
+            }
+        } else if (winnerScore.isAdvantage() || pointsWinner == 40) {
+
+            winnerScore.setPoints(0);
+            loserScore.setPoints(0);
+            winnerScore.setGames(++gamesWinner);
+
+        }
+
+        if (gamesWinner >= 6 && gamesLoser <= 4 || gamesWinner == 7) {
+
+            winnerScore.setGames(0);
+            loserScore.setGames(0);
+            winnerScore.setSets(++setsWinner);
+
+        }
+
+        if (!score.getScoreFirstPlayer().isTieBreak() && gamesWinner == 6 && gamesLoser == 6) {
+            winnerScore.setTieBreak(true);
+            loserScore.setTieBreak(true);
+
+            countTieBreakPoints(winnerScore, loserScore);
         }
     }
+
+    private void countTieBreakPoints(Score winnerScore, Score loserScore) {
+        winnerScore.setPoints(winnerScore.getPoints() + 1);
+
+        if (winnerScore.getPoints() == 7 && winnerScore.getPoints() - loserScore.getPoints() >= 2) {
+
+            winnerScore.setPoints(winnerScore.getGames() + 1);
+            winnerScore.setPoints(0);
+            loserScore.setPoints(0);
+            winnerScore.setTieBreak(false);
+            loserScore.setTieBreak(false);
+        }
+
+    }
+
+    public boolean isMatchOver(MatchScore matchScore) {
+
+        int setsFirstPlayer = matchScore.getScoreFirstPlayer().getSets();
+        int setsSecondPlayer = matchScore.getScoreSecondPlayer().getSets();
+
+        return setsFirstPlayer == 2 || setsSecondPlayer == 2;
+    }
 }
-
-    /*public boolean isMatchOver(MatchScore matchScore) {
-
-        matchScore.getScoreFirstPlayer();
-        matchScore.getScoreFirstPlayer();
-
-        //if (matchScore.getScoreFirstPlayer())
-
-        //todo поменять фолс
-        return false;
-    }*/
-
-
-
-

@@ -36,34 +36,21 @@
         <div class="current-match-image"></div>
         <section class="score">
             <table class="table">
-                <thead class="result">
-                <tr>
-                    <th class="table-text">Player</th>
-                    <th class="table-text">Sets</th>
-                    <th class="table-text">Games</th>
-                    <th class="table-text">Points</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr class="player1">
-                    <td class="table-text">Rafael Nadal</td>
-                    <td class="table-text">2</td>
-                    <td class="table-text">4</td>
-                    <td class="table-text">40</td>
-                    <td class="table-text">
-                        <div class="score-btn">Score</div>
-                    </td>
-                </tr>
-                <tr class="player2">
-                    <td class="table-text">Roger Federer</td>
-                    <td class="table-text">2</td>
-                    <td class="table-text">3</td>
-                    <td class="table-text">15</td>
-                    <td class="table-text">
-                        <div class="score-btn">Score</div>
-                    </td>
-                </tr>
-                </tbody>
+                <c:forEach var="player" items="${players}">
+                    <tr>
+                        <td class="table-text"><c:out value="${player.name}" /></td>
+                        <td class="table-text"><c:out value="${player.sets}" /></td>
+                        <td class="table-text"><c:out value="${player.games}" /></td>
+                        <td class="table-text"><c:out value="${player.points}" /></td>
+                        <td class="table-text">
+                            <form action="/update-score" method="post">
+                                <input type="hidden" name="playerId" value="${player.id}" />
+                                <button class="score-btn" type="submit">Score</button>
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
+
             </table>
         </section>
     </div>

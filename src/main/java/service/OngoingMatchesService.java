@@ -9,20 +9,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class OngoingMatchesService {
 
-    private ConcurrentHashMap<UUID, MatchScore> ongoingMatches;
+    private final ConcurrentHashMap<UUID, MatchScore> ongoingMatches = new ConcurrentHashMap<>();
 
     PlayerDao playerDao = new PlayerDao();
 
     MatchScore match = new MatchScore();
 
-    //todo: не понимаю что нужно указать в конструкторе чтобы, нормально вызвать объект класса
-    //todo: идея - поменять параметры конструктора
-
     public MatchScore getMatchScoreWithPlayers(String firstNameOfPlayer, String secondNameOfPlayer) {
 
-        //сейвит, если нету в бд, или ищет по имени, если есть
 
-        //todo подумать над опшиналами
+
         Player player1 = playerDao.findByName(firstNameOfPlayer);
 
         if (player1 == null) {
