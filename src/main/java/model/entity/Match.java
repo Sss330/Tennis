@@ -18,11 +18,9 @@ public class Match {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "player_id", nullable = false)
     private Player player1;
 
     @ManyToOne
-    @JoinColumn(name = "player_id", nullable = false)
     private Player player2;
 
     @ManyToOne

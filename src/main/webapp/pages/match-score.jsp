@@ -43,7 +43,7 @@
                         <td class="table-text"><c:out value="${player.games}" /></td>
                         <td class="table-text"><c:out value="${player.points}" /></td>
                         <td class="table-text">
-                            <form action="/update-score" method="post">
+                            <form action="${pageContext.request.contextPath}/update-score" method="post">
                                 <input type="hidden" name="playerId" value="${player.id}" />
                                 <button class="score-btn" type="submit">Score</button>
                             </form>

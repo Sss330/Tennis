@@ -31,7 +31,6 @@ public class MatchDao implements CrudTennisDao<Match> {
     @Override
     public void save(Match match) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-
             session.beginTransaction();
 
             session.save(match);

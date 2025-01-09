@@ -89,6 +89,8 @@ public class MatchScoreCalculationService {
 
         }
 
+
+        //запускается тай брейк
         if (!score.getScoreFirstPlayer().isTieBreak() && gamesWinner == 6 && gamesLoser == 6) {
             winnerScore.setTieBreak(true);
             loserScore.setTieBreak(true);
@@ -98,16 +100,21 @@ public class MatchScoreCalculationService {
     }
 
     private void countTieBreakPoints(Score winnerScore, Score loserScore) {
-        winnerScore.setPoints(winnerScore.getPoints() + 1);
 
-        if (winnerScore.getPoints() == 7 && winnerScore.getPoints() - loserScore.getPoints() >= 2) {
+        if (winnerScore.getPoints() >= 7 && winnerScore.getPoints() - loserScore.getPoints() >= 2) {
 
-            winnerScore.setPoints(winnerScore.getGames() + 1);
+            winnerScore.setGames(0);
+            loserScore.setGames(0);
+            winnerScore.setSets(winnerScore.getSets() + 1);
             winnerScore.setPoints(0);
             loserScore.setPoints(0);
+
             winnerScore.setTieBreak(false);
             loserScore.setTieBreak(false);
+        } else {
+            winnerScore.setPoints(winnerScore.getPoints() + 1);
         }
+
 
     }
 

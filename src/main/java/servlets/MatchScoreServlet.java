@@ -22,6 +22,9 @@ public class MatchScoreServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("pages/match-score.jsp").forward(req, resp);
+
+
+
     }
 
     @Override
@@ -39,6 +42,8 @@ public class MatchScoreServlet extends HttpServlet {
 
             ongoingMatchesService.saveMatch(uuid, currentMatch);
             ongoingMatchesService.deleteMatch(uuid);
+
+            resp.sendRedirect("pages/matches.jsp");
         }
     }
 }

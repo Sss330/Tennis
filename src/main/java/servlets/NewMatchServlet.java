@@ -20,6 +20,11 @@ public class NewMatchServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        String uuidParam = req.getParameter("uuid");
+
+        req.setAttribute("uuid", uuidParam);
+
         req.getRequestDispatcher("pages/new-match.jsp").forward(req, resp);
     }
 
@@ -41,6 +46,7 @@ public class NewMatchServlet extends HttpServlet {
 
         ongoingMatchesService.saveMatch(uuidOfMatch, ongoingMatchesService.getMatchScoreWithPlayers(firstPlayer, secondPlayer));
 
-        resp.sendRedirect("pages/match-score.jsp?uuid=" + uuidOfMatch);
+        resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + uuidOfMatch);
+
     }
 }

@@ -15,6 +15,7 @@ public class PlayerDao implements CrudTennisDao<Player> {
 
     public Player findByName(String name) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
             Query<Player> query = session.createQuery("from Player where name = :name", Player.class);
             query.setParameter("name", name);
             return query.uniqueResult();
@@ -25,6 +26,7 @@ public class PlayerDao implements CrudTennisDao<Player> {
     public void save(Player player) {
         try (SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
              Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
 
             session.save(player);
             session.getTransaction().commit();
@@ -34,6 +36,8 @@ public class PlayerDao implements CrudTennisDao<Player> {
     @Override
     public List<Player> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+
 
             Query<Player> query = session.createQuery("from Player", Player.class);
 
