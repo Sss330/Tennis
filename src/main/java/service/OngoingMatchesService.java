@@ -1,19 +1,24 @@
 package service;
 
 import dao.PlayerDao;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import model.comon.MatchScore;
+import model.comon.Score;
 import model.entity.Player;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OngoingMatchesService {
 
     private final ConcurrentHashMap<UUID, MatchScore> ongoingMatches = new ConcurrentHashMap<>();
 
+    private static final OngoingMatchesService INSTANCE = new OngoingMatchesService();
+
     PlayerDao playerDao = new PlayerDao();
 
-    MatchScore match = new MatchScore();
 
     public MatchScore getMatchScoreByNamesOfPlayers(String firstNameOfPlayer, String secondNameOfPlayer) {
 
@@ -33,12 +38,12 @@ public class OngoingMatchesService {
             playerDao.save(player2);
         }
 
-        match = MatchScore.builder()
+        return MatchScore.builder()
                 .firstPlayerId(player1.getId())
                 .secondPlayerId(player2.getId())
+                .scoreFirstPlayer(new Score())
+                .scoreSecondPlayer(new Score())
                 .build();
-
-        return match;
     }
 
     public void saveMatch(UUID uuidOfMatch, MatchScore currentMatch) {
@@ -59,4 +64,8 @@ public class OngoingMatchesService {
         return playerDao.findPlayerById(idPlayer);
     }
 
+    public static OngoingMatchesService getInstance() {
+
+        return INSTANCE;
+    }
 }

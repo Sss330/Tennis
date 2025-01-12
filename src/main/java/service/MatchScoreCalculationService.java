@@ -89,7 +89,6 @@ public class MatchScoreCalculationService {
 
         }
 
-
         //запускается тай брейк
         if (!score.getScoreFirstPlayer().isTieBreak() && gamesWinner == 6 && gamesLoser == 6) {
             winnerScore.setTieBreak(true);

@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.comon.MatchScore;
-import model.entity.Match;
 import service.OngoingMatchesService;
 
 import java.io.IOException;
@@ -18,13 +17,12 @@ import java.util.UUID;
 @WebServlet("/new-match")
 public class NewMatchServlet extends HttpServlet {
 
-    OngoingMatchesService ongoingMatchesService = new OngoingMatchesService();
+    OngoingMatchesService ongoingMatchesService = OngoingMatchesService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String uuidParam = req.getParameter("uuid");
-
         req.setAttribute("uuid", uuidParam);
 
         req.getRequestDispatcher("pages/new-match.jsp").forward(req, resp);
@@ -45,10 +43,10 @@ public class NewMatchServlet extends HttpServlet {
         }
 
         UUID uuidOfMatch = UUID.randomUUID();
-        MatchScore asdd = ongoingMatchesService.getMatchScoreByNamesOfPlayers(firstPlayer, secondPlayer);
-        ongoingMatchesService.saveMatch(uuidOfMatch, ongoingMatchesService.getMatchScoreByNamesOfPlayers(firstPlayer, secondPlayer));
-        resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + uuidOfMatch);
+        MatchScore matchScore = ongoingMatchesService.getMatchScoreByNamesOfPlayers(firstPlayer, secondPlayer);
 
-        int asd = 1;
+        ongoingMatchesService.saveMatch(uuidOfMatch, matchScore);
+
+        resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + uuidOfMatch);
     }
 }

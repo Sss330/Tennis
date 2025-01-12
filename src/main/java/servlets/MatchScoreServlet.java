@@ -16,7 +16,7 @@ import java.util.UUID;
 @WebServlet("/match-score")
 public class MatchScoreServlet extends HttpServlet {
 
-    OngoingMatchesService ongoingMatchesService = new OngoingMatchesService();
+    OngoingMatchesService ongoingMatchesService = OngoingMatchesService.getInstance();
     MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService();
 
     @Override
@@ -27,7 +27,7 @@ public class MatchScoreServlet extends HttpServlet {
        String firstPlayerName = ongoingMatchesService.getNamePlayerById(currentMatch.getFirstPlayerId());
        String secondPlayerName = ongoingMatchesService.getNamePlayerById(currentMatch.getSecondPlayerId());
 
-        req.setAttribute("uuid", uuid);
+        req.setAttribute("uuid", uuid.toString());
         req.setAttribute("match", currentMatch);
         req.setAttribute("firstPlayerName", firstPlayerName);
         req.setAttribute("secondPlayerName", secondPlayerName);
@@ -48,6 +48,15 @@ public class MatchScoreServlet extends HttpServlet {
             ongoingMatchesService.deleteMatch(uuid);
 
             resp.sendRedirect("pages/matches.jsp");
+        }else {
+            String firstPlayerName = ongoingMatchesService.getNamePlayerById(currentMatch.getFirstPlayerId());
+            String secondPlayerName = ongoingMatchesService.getNamePlayerById(currentMatch.getSecondPlayerId());
+
+            req.setAttribute("uuid", uuid.toString());
+            req.setAttribute("match", currentMatch);
+            req.setAttribute("firstPlayerName", firstPlayerName);
+            req.setAttribute("secondPlayerName", secondPlayerName);
+            req.getRequestDispatcher("pages/match-score.jsp").forward(req, resp);
         }
     }
 }
