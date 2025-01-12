@@ -6,6 +6,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.comon.MatchScore;
+import model.entity.Match;
 import service.OngoingMatchesService;
 
 import java.io.IOException;
@@ -30,11 +32,11 @@ public class NewMatchServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-
         String firstPlayer = req.getParameter("playerOne");
         String secondPlayer = req.getParameter("playerTwo");
 
+        req.setAttribute("first-name-player", firstPlayer);
+        req.setAttribute("second-name-player", secondPlayer);
 
         if (firstPlayer == null || secondPlayer == null || firstPlayer.equals(secondPlayer)) {
             req.setAttribute("error", "имена игроков не могут быть одинаковыми или пустыми ");
@@ -43,10 +45,10 @@ public class NewMatchServlet extends HttpServlet {
         }
 
         UUID uuidOfMatch = UUID.randomUUID();
-
-        ongoingMatchesService.saveMatch(uuidOfMatch, ongoingMatchesService.getMatchScoreWithPlayers(firstPlayer, secondPlayer));
-
+        MatchScore asdd = ongoingMatchesService.getMatchScoreByNamesOfPlayers(firstPlayer, secondPlayer);
+        ongoingMatchesService.saveMatch(uuidOfMatch, ongoingMatchesService.getMatchScoreByNamesOfPlayers(firstPlayer, secondPlayer));
         resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + uuidOfMatch);
 
+        int asd = 1;
     }
 }

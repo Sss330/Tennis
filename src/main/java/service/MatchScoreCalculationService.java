@@ -10,7 +10,7 @@ public class MatchScoreCalculationService {
     //todo поменять магические числа на константы
     //todo поменять иф элсы на свитч кейсы
 
-    public void winServe(MatchScore matchScore, long servedPlayerId) {
+    public void updateScore(MatchScore matchScore, long servedPlayerId) {
 
         if (isMatchOver(matchScore)) {
             return;

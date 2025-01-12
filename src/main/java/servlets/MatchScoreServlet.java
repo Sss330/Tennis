@@ -21,25 +21,29 @@ public class MatchScoreServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        UUID uuid = UUID.fromString(req.getParameter("uuid"));
+
+       MatchScore currentMatch = ongoingMatchesService.getMatch(uuid);
+       String firstPlayerName = ongoingMatchesService.getNamePlayerById(currentMatch.getFirstPlayerId());
+       String secondPlayerName = ongoingMatchesService.getNamePlayerById(currentMatch.getSecondPlayerId());
+
+        req.setAttribute("uuid", uuid);
+        req.setAttribute("match", currentMatch);
+        req.setAttribute("firstPlayerName", firstPlayerName);
+        req.setAttribute("secondPlayerName", secondPlayerName);
+
         req.getRequestDispatcher("pages/match-score.jsp").forward(req, resp);
-
-
-
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         UUID uuid = UUID.fromString(req.getParameter("uuid"));
 
         long servedPlayerId = Long.parseLong(req.getParameter("served-player_id"));
         MatchScore currentMatch = ongoingMatchesService.getMatch(uuid);
-
-        matchScoreCalculationService.winServe(currentMatch, servedPlayerId);
-
+        matchScoreCalculationService.updateScore(currentMatch, servedPlayerId);
 
         if (matchScoreCalculationService.isMatchOver(currentMatch)) {
-
             ongoingMatchesService.saveMatch(uuid, currentMatch);
             ongoingMatchesService.deleteMatch(uuid);
 

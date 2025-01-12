@@ -15,12 +15,9 @@ public class OngoingMatchesService {
 
     MatchScore match = new MatchScore();
 
-    public MatchScore getMatchScoreWithPlayers(String firstNameOfPlayer, String secondNameOfPlayer) {
-
-
+    public MatchScore getMatchScoreByNamesOfPlayers(String firstNameOfPlayer, String secondNameOfPlayer) {
 
         Player player1 = playerDao.findByName(firstNameOfPlayer);
-
         if (player1 == null) {
             player1 = Player.builder()
                     .name(firstNameOfPlayer)
@@ -29,7 +26,6 @@ public class OngoingMatchesService {
         }
 
         Player player2 = playerDao.findByName(secondNameOfPlayer);
-
         if (player2 == null) {
             player2 = Player.builder()
                     .name(secondNameOfPlayer)
@@ -45,24 +41,22 @@ public class OngoingMatchesService {
         return match;
     }
 
-
-    public void saveMatch(UUID codeOfMatch, MatchScore currentMatch) {
-
-        ongoingMatches.put(codeOfMatch, currentMatch);
-
+    public void saveMatch(UUID uuidOfMatch, MatchScore currentMatch) {
+        ongoingMatches.put(uuidOfMatch, currentMatch);
     }
 
 
     public void deleteMatch(UUID codeOfMatch) {
-
         ongoingMatches.remove(codeOfMatch);
-
     }
 
 
     public MatchScore getMatch(UUID codeOfMatch) {
-
         return ongoingMatches.get(codeOfMatch);
-
     }
+
+    public String getNamePlayerById(long idPlayer) {
+        return playerDao.findPlayerById(idPlayer);
+    }
+
 }
