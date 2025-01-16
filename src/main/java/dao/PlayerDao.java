@@ -1,14 +1,14 @@
 package dao;
 
+import exception.PlayerNotFoundException;
+import exception.PlayerNotSaveException;
 import lombok.Getter;
 import model.entity.Player;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import utils.HibernateUtil;
+import util.HibernateUtil;
 
 import java.util.List;
-import java.util.Random;
 
 @Getter
 public class PlayerDao implements CrudTennisDao<Player> {
@@ -20,20 +20,16 @@ public class PlayerDao implements CrudTennisDao<Player> {
 
             Query<Player> query = session.createQuery("from Player where name = :name", Player.class);
             query.setParameter("name", name);
-
             Player player = query.uniqueResult();
-
             session.getTransaction().commit();
             return player;
 
         } catch (Exception e) {
-
-            throw new RuntimeException("не удалось найти игрока по имени " + e);
-
+            throw new PlayerNotFoundException("Не удалось найти игрока по имени " + e);
         }
     }
 
-    public String findPlayerById(long id) {
+    public String getPlayerNameById(long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
 
@@ -45,23 +41,19 @@ public class PlayerDao implements CrudTennisDao<Player> {
             session.getTransaction().commit();
 
             return (player != null) ? player.getName() : null;
-
         } catch (Exception e) {
-            throw new RuntimeException("не получилось найти по id " + e);
+            throw new PlayerNotFoundException("Не удалось найти игрока по id " + e);
         }
     }
-
 
     @Override
     public void save(Player player) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-
             session.save(player);
             session.getTransaction().commit();
-
         } catch (Exception e) {
-            throw new RuntimeException();
+            throw new PlayerNotSaveException("Не удалось сохранить игрока " + e);
         }
     }
 
@@ -70,9 +62,7 @@ public class PlayerDao implements CrudTennisDao<Player> {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
 
-
             Query<Player> query = session.createQuery("from Player", Player.class);
-
             session.getTransaction().commit();
             return query.getResultList();
         }

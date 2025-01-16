@@ -9,6 +9,7 @@ public class MatchScoreCalculationService {
 
     //todo поменять магические числа на константы
     //todo поменять иф элсы на свитч кейсы
+    //todo сделать чтобы работал тай брейк
 
     public void updateScore(MatchScore matchScore, long servedPlayerId) {
 
