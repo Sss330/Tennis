@@ -1,8 +1,8 @@
-package utils;
+package util;
 
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
-import model.Player;
+import model.entity.Player;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.hibernate.cfg.Configuration;
