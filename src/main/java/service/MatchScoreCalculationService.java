@@ -50,7 +50,6 @@ public class MatchScoreCalculationService {
         }
     }
 
-    //преймущество AD
     private void handleDeuceOrGameWin(Score winnerScore, Score loserScore) {
 
         if (winnerScore.getPoints() == POINTS_40 && loserScore.getPoints() == POINTS_40) {
@@ -77,6 +76,12 @@ public class MatchScoreCalculationService {
 
         int gamesWinner = winnerScore.getGames();
         int gamesLoser = loserScore.getGames();
+
+        if (gamesWinner == MAX_GAMES_BEFORE_TIEBREAK && gamesLoser == MAX_GAMES_BEFORE_TIEBREAK) {
+            winnerScore.setTieBreak(true);
+            loserScore.setTieBreak(true);
+            return;
+        }
 
         if ((gamesWinner >= MAX_GAMES_BEFORE_TIEBREAK && gamesWinner - gamesLoser >= WINNING_GAMES_DIFF) || gamesWinner == SET_WIN_GAMES) {
             winnerScore.setGames(0);
