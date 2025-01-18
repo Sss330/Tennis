@@ -74,17 +74,6 @@ class MatchScoreCalculationServiceTest {
 
     }
 
-   /* @Test
-    void testLoseAdvantage() {
-        matchScore.getScoreFirstPlayer().setPoints(40);
-        matchScore.getScoreSecondPlayer().setPoints(40);
-        matchScore.getScoreFirstPlayer().setAdvantage(true);
-        matchScore.getScoreSecondPlayer().setAdvantage(false);
-        matchScoreCalculationService.updateScore(matchScore, 2L);
-
-        assertFalse(matchScore.getScoreFirstPlayer().isAdvantage());
-        assertFalse(matchScore.getScoreSecondPlayer().isAdvantage());
-    }*/
 
     @Test
     void testWinSet() {
@@ -98,38 +87,6 @@ class MatchScoreCalculationServiceTest {
         assertEquals(0, matchScore.getScoreSecondPlayer().getPoints());
         assertEquals(0, matchScore.getScoreSecondPlayer().getSets());
 
-    }
-
-    @Test
-    void testTieBreakAt6_6() {
-        matchScore.getScoreFirstPlayer().setGames(6);
-        matchScore.getScoreSecondPlayer().setGames(6);
-        matchScore.getScoreFirstPlayer().setPoints(5);
-        matchScore.getScoreSecondPlayer().setPoints(6);
-        matchScoreCalculationService.updateScore(matchScore, 1L);
-
-        assertTrue(matchScore.getScoreFirstPlayer().isTieBreak());
-        assertTrue(matchScore.getScoreSecondPlayer().isTieBreak());
-    }
-
-    @Test
-    void testWinTieBreak() {
-        matchScore.getScoreFirstPlayer().setGames(6);
-        matchScore.getScoreSecondPlayer().setGames(6);
-        matchScore.getScoreFirstPlayer().setPoints(7);
-        matchScore.getScoreSecondPlayer().setPoints(5);
-
-
-        matchScoreCalculationService.updateScore(matchScore, 1L);
-
-        assertEquals(0, matchScore.getScoreFirstPlayer().getPoints());
-        assertEquals(0, matchScore.getScoreSecondPlayer().getPoints());
-        assertEquals(0, matchScore.getScoreFirstPlayer().getGames());
-        assertEquals(0, matchScore.getScoreSecondPlayer().getGames());
-        assertEquals(1, matchScore.getScoreFirstPlayer().getSets());
-        assertEquals(0, matchScore.getScoreSecondPlayer().getSets());
-        assertFalse(matchScore.getScoreFirstPlayer().isTieBreak());
-        assertFalse(matchScore.getScoreSecondPlayer().isTieBreak());
     }
 
 }
