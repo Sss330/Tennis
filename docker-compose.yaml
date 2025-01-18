@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:15
+    container_name: tennis-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: Tennis
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: always
+
+  tennis-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tennis-app
+    depends_on:
+      - db
+    # эти переменные скорее нужны для Spring,
+    # но раз у вас hibernate.cfg.xml, можно их опустить
+    # либо использовать для логики "перезаписи" URL
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/Tennis
+      DB_USER: postgres
+      DB_PASS: pass
+    ports:
+      - "8080:8080"
+    restart: always
+
+volumes:
+  db_data:

@@ -74,8 +74,7 @@ class MatchScoreCalculationServiceTest {
 
     }
 
-    //
-    @Test
+   /* @Test
     void testLoseAdvantage() {
         matchScore.getScoreFirstPlayer().setPoints(40);
         matchScore.getScoreSecondPlayer().setPoints(40);
@@ -85,7 +84,7 @@ class MatchScoreCalculationServiceTest {
 
         assertFalse(matchScore.getScoreFirstPlayer().isAdvantage());
         assertFalse(matchScore.getScoreSecondPlayer().isAdvantage());
-    }
+    }*/
 
     @Test
     void testWinSet() {

@@ -78,7 +78,9 @@
                     <td class="table-text"><%= firstPlayerName %></td>
                     <td class="table-text"><%= scoreFirstPlayer.getSets() %></td>
                     <td class="table-text"><%= scoreFirstPlayer.getGames() %></td>
-                    <td class="table-text"><%= scoreFirstPlayer.getPoints() %></td>
+                    <td class="table-text">
+                        <%= scoreFirstPlayer.isAdvantage() ? "AD" : scoreFirstPlayer.getPoints() %>
+                    </td>
                     <td class="table-text">
                         <form action="<%= request.getContextPath() %>/match-score" method="post">
                             <!-- Передаём uuid матча -->
@@ -95,7 +97,9 @@
                     <td class="table-text"><%= secondPlayerName %></td>
                     <td class="table-text"><%= scoreSecondPlayer.getSets() %></td>
                     <td class="table-text"><%= scoreSecondPlayer.getGames() %></td>
-                    <td class="table-text"><%= scoreSecondPlayer.getPoints() %></td>
+                    <td class="table-text">
+                        <%= scoreSecondPlayer.isAdvantage() ? "AD" : scoreSecondPlayer.getPoints() %>
+                    </td>
                     <td class="table-text">
                         <form action="<%= request.getContextPath() %>/match-score" method="post">
                             <!-- Передаём uuid матча -->
