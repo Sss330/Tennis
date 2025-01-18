@@ -1,32 +1,63 @@
-<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD//EN"
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-  <session-factory>
-    <!-- URL для подключения к базе данных -->
-    <property name="connection.url">jdbc:postgresql://localhost:5432/postgres</property>
+    <session-factory>
+        <!-- URL для подключения к базе данных -->
+        <property name="connection.url">jdbc:postgresql://localhost:5432/postgres</property>
 
-    <!-- Класс драйвера для базы данных -->
+        <!-- Класс драйвера для базы данных -->
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+
+        <!-- Имя пользователя базы данных -->
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">pass</property>
+
+        <!-- Автоматическое обновление схемы базы данных -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- Диалект Hibernate для базы данных PostgreSQL -->
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+        <!-- Логирование SQL-запросов -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="show_sql">true</property>
+
+        <mapping class="model.entity.Match"/>
+        <mapping class="model.entity.Player"/>
+    </session-factory>
+</hibernate-configuration>
+
+    <!--    <?xml version='1.0' encoding='utf-8'?>
+        <!DOCTYPE hibernate-configuration PUBLIC
+                "-//Hibernate/Hibernate Configuration DTD//EN"
+                "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+<session-factory>
+    &lt;!&ndash; URL для контейнера Postgres &ndash;&gt;
+    <property name="connection.url">jdbc:postgresql://db:5432/Tennis</property>
+
+    &lt;!&ndash; Драйвер PostgreSQL &ndash;&gt;
     <property name="connection.driver_class">org.postgresql.Driver</property>
 
-    <!-- Имя пользователя базы данных -->
+    &lt;!&ndash; Учетные данные - те же, что в docker-compose.yml &ndash;&gt;
     <property name="connection.username">postgres</property>
     <property name="connection.password">pass</property>
 
-    <!-- Автоматическое обновление схемы базы данных -->
+    &lt;!&ndash; Автообновление схемы &ndash;&gt;
     <property name="hibernate.hbm2ddl.auto">update</property>
 
-    <!-- Диалект Hibernate для базы данных PostgreSQL -->
+    &lt;!&ndash; Диалект для PostgreSQL &ndash;&gt;
     <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 
-    <!-- Логирование SQL-запросов -->
+    &lt;!&ndash; Логирование &ndash;&gt;
     <property name="hibernate.show_sql">true</property>
     <property name="hibernate.format_sql">true</property>
-    <property name="show_sql">true</property>
 
+    &lt;!&ndash; Маппинг сущностей &ndash;&gt;
     <mapping class="model.entity.Match"/>
     <mapping class="model.entity.Player"/>
-  </session-factory>
+</session-factory>
 </hibernate-configuration>
-
+-->
