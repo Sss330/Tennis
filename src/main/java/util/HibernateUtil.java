@@ -1,4 +1,4 @@
-package utils;
+package util;
 
 import lombok.Getter;
 import lombok.experimental.UtilityClass;

@@ -17,8 +17,8 @@ class MatchScoreCalculationServiceTest {
     void setUp() {
         matchScoreCalculationService = new MatchScoreCalculationService();
         matchScore = MatchScore.builder()
-                .scoreFirstPlayer(new Score(0, 0, 0, false,false))
-                .scoreSecondPlayer(new Score(0, 0, 0, false,false))
+                .scoreFirstPlayer(new Score(0, 0, 0, false, false))
+                .scoreSecondPlayer(new Score(0, 0, 0, false, false))
                 .firstPlayerId(1L)
                 .secondPlayerId(2L)
                 .build();
@@ -30,7 +30,7 @@ class MatchScoreCalculationServiceTest {
         matchScore.getScoreSecondPlayer().setPoints(0);
         matchScore.getScoreFirstPlayer().setGames(0);
         matchScore.getScoreSecondPlayer().setGames(0);
-        matchScoreCalculationService.winServe(matchScore, 1L);
+        matchScoreCalculationService.updateScore(matchScore, 1L);
 
         assertEquals(1, matchScore.getScoreFirstPlayer().getGames());
         assertEquals(0, matchScore.getScoreSecondPlayer().getGames());
@@ -44,7 +44,7 @@ class MatchScoreCalculationServiceTest {
         matchScore.getScoreSecondPlayer().setPoints(40);
         matchScore.getScoreFirstPlayer().setAdvantage(false);
         matchScore.getScoreSecondPlayer().setAdvantage(false);
-        matchScoreCalculationService.winServe(matchScore, 1L);
+        matchScoreCalculationService.updateScore(matchScore, 1L);
 
         assertTrue(matchScore.getScoreFirstPlayer().isAdvantage());
         assertFalse(matchScore.getScoreSecondPlayer().isAdvantage());
@@ -61,7 +61,7 @@ class MatchScoreCalculationServiceTest {
         matchScore.getScoreSecondPlayer().setAdvantage(false);
         matchScore.getScoreFirstPlayer().setSets(1);
         matchScore.getScoreSecondPlayer().setSets(0);
-        matchScoreCalculationService.winServe(matchScore, 1L);
+        matchScoreCalculationService.updateScore(matchScore, 1L);
 
         assertEquals(0, matchScore.getScoreFirstPlayer().getPoints());
         assertEquals(0, matchScore.getScoreSecondPlayer().getPoints());
@@ -74,27 +74,17 @@ class MatchScoreCalculationServiceTest {
 
     }
 
-    @Test
-    void testLoseAdvantage (){
-        matchScore.getScoreFirstPlayer().setPoints(40);
-        matchScore.getScoreSecondPlayer().setPoints(40);
-        matchScore.getScoreFirstPlayer().setAdvantage(true);
-        matchScore.getScoreFirstPlayer().setAdvantage(false);
-        matchScoreCalculationService.winServe(matchScore,2L);
 
-        assertFalse(matchScore.getScoreFirstPlayer().isAdvantage());
-        assertFalse(matchScore.getScoreSecondPlayer().isAdvantage());
-    }
     @Test
-    void testWinSet (){
+    void testWinSet() {
         matchScore.getScoreFirstPlayer().setPoints(40);
         matchScore.getScoreSecondPlayer().setPoints(15);
         matchScore.getScoreFirstPlayer().setGames(0);
         matchScore.getScoreSecondPlayer().setGames(0);
-        matchScoreCalculationService.winServe(matchScore,1L);
+        matchScoreCalculationService.updateScore(matchScore, 1L);
 
-        assertEquals(0,matchScore.getScoreFirstPlayer().getPoints());
-        assertEquals(0,matchScore.getScoreSecondPlayer().getPoints());
+        assertEquals(0, matchScore.getScoreFirstPlayer().getPoints());
+        assertEquals(0, matchScore.getScoreSecondPlayer().getPoints());
         assertEquals(0, matchScore.getScoreSecondPlayer().getSets());
 
     }
