@@ -5,6 +5,7 @@ import model.comon.Score;
 
 public class MatchScoreCalculationService {
 
+
     private static final int POINTS_0 = 0;
     private static final int POINTS_15 = 15;
     private static final int POINTS_30 = 30;
