@@ -42,7 +42,6 @@ public class MatchScoreCalculationService {
             return;
         }
         switch (winnerScore.getPoints()) {
-
             case POINTS_0 -> winnerScore.setPoints(POINTS_15);
             case POINTS_15 -> winnerScore.setPoints(POINTS_30);
             case POINTS_30 -> winnerScore.setPoints(POINTS_40);
@@ -53,7 +52,11 @@ public class MatchScoreCalculationService {
     private void handleDeuceOrGameWin(Score winnerScore, Score loserScore) {
 
         if (winnerScore.getPoints() == POINTS_40 && loserScore.getPoints() == POINTS_40) {
-            if (winnerScore.isAdvantage()) {
+
+            if (loserScore.isAdvantage()) {
+                winnerScore.setAdvantage(false);
+                loserScore.setAdvantage(false);
+            } else if (winnerScore.isAdvantage()) {
                 resetPoints(winnerScore, loserScore);
                 winnerScore.setGames(winnerScore.getGames() + 1);
                 checkSetWin(winnerScore, loserScore);

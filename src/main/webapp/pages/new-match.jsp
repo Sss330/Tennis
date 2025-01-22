@@ -35,7 +35,13 @@
         <div class="new-match-image"></div>
         <div class="form-container center">
             <form method="post" action="<%= request.getContextPath() %>/new-match">
-                <p style="color: red;"><%= request.getAttribute("error") %></p>
+                <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+                <c:if test="${not empty error}">
+                    <p style="color: red;">${error}</p>
+                </c:if>
+
+
                 <label class="label-player" for="playerOne">Player one</label>
                 <input class="input-player" id="playerOne" name="playerOne" placeholder="Name" type="text" required>
 
