@@ -1,12 +1,10 @@
 package model.entity;
 
 import jakarta.persistence.*;
-        import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,11 +18,11 @@ public class Match {
 
     @ManyToOne
     @JoinColumn(name = "player1")
-    private Player player1;
+    private Player firstPlayer;
 
     @ManyToOne
     @JoinColumn(name = "player2")
-    private Player player2;
+    private Player secondPlayer;
 
     @ManyToOne
     @JoinColumn(name = "winner")
