@@ -1,6 +1,6 @@
 package servlet;
 
-import exception.MatchNotSaveException;
+import exception.SavingMatchException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -86,14 +86,14 @@ public class MatchScoreServlet extends HttpServlet {
             Player winner = new Player(servedPlayerId, ongoingMatchesService.getNamePlayerById(servedPlayerId));
 
             Match match = Match.builder()
-                    .player1(player1)
-                    .player2(player2)
+                    .firstPlayer(player1)
+                    .secondPlayer(player2)
                     .winner(winner)
                     .build();
 
             try {
                 finishedMatchesPersistenceService.saveFinishedMatch(match);
-            } catch (MatchNotSaveException e) {
+            } catch (SavingMatchException e) {
                 resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 req.setAttribute("error", "Не удалось сохранить матч ");
                 req.getRequestDispatcher("error.jsp").forward(req, resp);

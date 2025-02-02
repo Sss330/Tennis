@@ -4,10 +4,11 @@ package service;
 import dao.MatchDao;
 
 import exception.MatchNotFoundException;
-import exception.MatchNotSaveException;
+import exception.SavingMatchException;
 import model.entity.Match;
 
 import java.util.List;
+import java.util.Optional;
 
 public class FinishedMatchesPersistenceService {
     MatchDao matchDao = new MatchDao();
@@ -16,7 +17,7 @@ public class FinishedMatchesPersistenceService {
         try {
             matchDao.save(match);
         } catch (Exception e) {
-            throw new MatchNotSaveException("Не удалось сохранить матч " + e);
+            throw new SavingMatchException("Не удалось сохранить матч " + e);
         }
     }
 
@@ -32,9 +33,13 @@ public class FinishedMatchesPersistenceService {
         return matchDao.findAll();
     }
 
-    public List<Match> findMatchesByFilter(String filterByPlayerName, int offset, int limit) {
+    public Optional<List<Match>> findMatchesByFilter(String filterByPlayerName, int offset, int limit) {
         try {
-            return matchDao.findMatceshByFilter(filterByPlayerName, offset, limit);
+            String filter = (filterByPlayerName == null || filterByPlayerName.isBlank()) ? "" : filterByPlayerName;
+            String likeName = (filterByPlayerName == null || filterByPlayerName.isBlank())
+                    ? ""
+                    : "%" + filterByPlayerName + "%";
+            return matchDao.findMatchesByFilter(filter, likeName, offset, limit);
         } catch (MatchNotFoundException e) {
             throw new MatchNotFoundException("Не удалось найти матчи по фильтру " + e);
         }
@@ -47,5 +52,6 @@ public class FinishedMatchesPersistenceService {
             throw new MatchNotFoundException("Не удалось посчитать матчи по фильтру" + e);
         }
     }
+
 }
                                                                                             

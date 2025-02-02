@@ -10,6 +10,7 @@ import service.FinishedMatchesPersistenceService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @WebServlet("/matches")
 public class PlayedMatchesServlet extends HttpServlet {
@@ -39,7 +40,7 @@ public class PlayedMatchesServlet extends HttpServlet {
         }
         int offset = (currentPage - 1) * PAGE_SIZE;
 
-        List<Match> matches = finishedMatchesPersistenceService.findMatchesByFilter(filterByPlayerName, offset, PAGE_SIZE);
+        Optional<List<Match>> matches = finishedMatchesPersistenceService.findMatchesByFilter(filterByPlayerName, offset, PAGE_SIZE);
 
         long totalMatches = finishedMatchesPersistenceService
                 .countMatchesByFilter(filterByPlayerName);
