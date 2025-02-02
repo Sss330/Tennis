@@ -8,95 +8,109 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MatchScoreCalculationServiceTest {
 
-    private MatchScoreCalculationService matchScoreCalculationService;
+
+    private MatchScoreCalculationService service;
     private MatchScore matchScore;
+    private Score scoreFirst;
+    private Score scoreSecond;
+    private final long firstPlayerId = 1L;
+    private final long secondPlayerId = 2L;
 
-
-    //по умолчанию выйгрывает первый игрок 1L
     @BeforeEach
     void setUp() {
-        matchScoreCalculationService = new MatchScoreCalculationService();
-        matchScore = MatchScore.builder()
-                .scoreFirstPlayer(new Score(0, 0, 0, false,false))
-                .scoreSecondPlayer(new Score(0, 0, 0, false,false))
-                .firstPlayerId(1L)
-                .secondPlayerId(2L)
-                .build();
+        service = new MatchScoreCalculationService();
+        scoreFirst = new Score();
+        scoreSecond = new Score();
+        scoreFirst.setPoints(0);
+        scoreFirst.setGames(0);
+        scoreFirst.setSets(0);
+        scoreFirst.setTieBreak(false);
+        scoreFirst.setAdvantage(false);
+        scoreSecond.setPoints(0);
+        scoreSecond.setGames(0);
+        scoreSecond.setSets(0);
+        scoreSecond.setTieBreak(false);
+        scoreSecond.setAdvantage(false);
+        matchScore = new MatchScore();
+        matchScore.setFirstPlayerId(firstPlayerId);
+        matchScore.setSecondPlayerId(secondPlayerId);
+        matchScore.setScoreFirstPlayer(scoreFirst);
+        matchScore.setScoreSecondPlayer(scoreSecond);
     }
 
     @Test
-    void testWinGameAt40_0() {
-        matchScore.getScoreFirstPlayer().setPoints(40);
-        matchScore.getScoreSecondPlayer().setPoints(0);
-        matchScore.getScoreFirstPlayer().setGames(0);
-        matchScore.getScoreSecondPlayer().setGames(0);
-        matchScoreCalculationService.winServe(matchScore, 1L);
-
-        assertEquals(1, matchScore.getScoreFirstPlayer().getGames());
-        assertEquals(0, matchScore.getScoreSecondPlayer().getGames());
-        assertEquals(0, matchScore.getScoreFirstPlayer().getPoints());
-        assertEquals(0, matchScore.getScoreSecondPlayer().getPoints());
+    void testUpdateScoreWhenMatchIsOver() {
+        scoreFirst.setSets(2);
+        service.updateScore(matchScore, firstPlayerId);
+        assertEquals(0, scoreFirst.getPoints());
     }
 
     @Test
-    void testDeuceAt40_40() {
-        matchScore.getScoreFirstPlayer().setPoints(40);
-        matchScore.getScoreSecondPlayer().setPoints(40);
-        matchScore.getScoreFirstPlayer().setAdvantage(false);
-        matchScore.getScoreSecondPlayer().setAdvantage(false);
-        matchScoreCalculationService.winServe(matchScore, 1L);
-
-        assertTrue(matchScore.getScoreFirstPlayer().isAdvantage());
-        assertFalse(matchScore.getScoreSecondPlayer().isAdvantage());
+    void testPointIncrementFrom0To15() {
+        service.updateScore(matchScore, firstPlayerId);
+        assertEquals(15, scoreFirst.getPoints());
     }
 
     @Test
-    void testWinGameAfterAdvantage() {
-
-        matchScore.getScoreFirstPlayer().setPoints(40);
-        matchScore.getScoreSecondPlayer().setPoints(40);
-        matchScore.getScoreFirstPlayer().setGames(5);
-        matchScore.getScoreSecondPlayer().setGames(0);
-        matchScore.getScoreFirstPlayer().setAdvantage(true);
-        matchScore.getScoreSecondPlayer().setAdvantage(false);
-        matchScore.getScoreFirstPlayer().setSets(1);
-        matchScore.getScoreSecondPlayer().setSets(0);
-        matchScoreCalculationService.winServe(matchScore, 1L);
-
-        assertEquals(0, matchScore.getScoreFirstPlayer().getPoints());
-        assertEquals(0, matchScore.getScoreSecondPlayer().getPoints());
-        assertEquals(0, matchScore.getScoreFirstPlayer().getGames());
-        assertEquals(0, matchScore.getScoreSecondPlayer().getGames());
-        assertFalse(matchScore.getScoreFirstPlayer().isAdvantage());
-        assertFalse(matchScore.getScoreSecondPlayer().isAdvantage());
-        assertEquals(2, matchScore.getScoreFirstPlayer().getSets());
-        assertEquals(0, matchScore.getScoreSecondPlayer().getSets());
-
+    void testPointIncrementFrom15To30() {
+        scoreFirst.setPoints(15);
+        service.updateScore(matchScore, firstPlayerId);
+        assertEquals(30, scoreFirst.getPoints());
     }
 
     @Test
-    void testLoseAdvantage (){
-        matchScore.getScoreFirstPlayer().setPoints(40);
-        matchScore.getScoreSecondPlayer().setPoints(40);
-        matchScore.getScoreFirstPlayer().setAdvantage(true);
-        matchScore.getScoreFirstPlayer().setAdvantage(false);
-        matchScoreCalculationService.winServe(matchScore,2L);
-
-        assertFalse(matchScore.getScoreFirstPlayer().isAdvantage());
-        assertFalse(matchScore.getScoreSecondPlayer().isAdvantage());
+    void testPointIncrementFrom30To40() {
+        scoreFirst.setPoints(30);
+        service.updateScore(matchScore, firstPlayerId);
+        assertEquals(40, scoreFirst.getPoints());
     }
+
     @Test
-    void testWinSet (){
-        matchScore.getScoreFirstPlayer().setPoints(40);
-        matchScore.getScoreSecondPlayer().setPoints(15);
-        matchScore.getScoreFirstPlayer().setGames(0);
-        matchScore.getScoreSecondPlayer().setGames(0);
-        matchScoreCalculationService.winServe(matchScore,1L);
+    void testGameWinWithoutDeuce() {
+        scoreFirst.setPoints(40);
+        scoreSecond.setPoints(30);
+        service.updateScore(matchScore, firstPlayerId);
+        assertEquals(0, scoreFirst.getPoints());
+        assertEquals(0, scoreSecond.getPoints());
+        assertEquals(1, scoreFirst.getGames());
+    }
 
-        assertEquals(0,matchScore.getScoreFirstPlayer().getPoints());
-        assertEquals(0,matchScore.getScoreSecondPlayer().getPoints());
-        assertEquals(0, matchScore.getScoreSecondPlayer().getSets());
+    @Test
+    void testDeuceAndAdvantageScenario() {
+        scoreFirst.setPoints(40);
+        scoreSecond.setPoints(40);
+        service.updateScore(matchScore, firstPlayerId);
+        assertTrue(scoreFirst.isAdvantage());
+        assertFalse(scoreSecond.isAdvantage());
+        service.updateScore(matchScore, secondPlayerId);
+        assertFalse(scoreFirst.isAdvantage());
+        assertFalse(scoreSecond.isAdvantage());
+        assertEquals(40, scoreFirst.getPoints());
+        assertEquals(40, scoreSecond.getPoints());
+        service.updateScore(matchScore, firstPlayerId);
+        assertTrue(scoreFirst.isAdvantage());
+        service.updateScore(matchScore, firstPlayerId);
+        assertEquals(0, scoreFirst.getPoints());
+        assertEquals(0, scoreSecond.getPoints());
+        assertEquals(1, scoreFirst.getGames());
+    }
 
+    @Test
+    void testTieBreakScenario() {
+        scoreFirst.setGames(6);
+        scoreSecond.setGames(6);
+        scoreFirst.setTieBreak(true);
+        scoreSecond.setTieBreak(true);
+        scoreFirst.setPoints(7);
+        scoreSecond.setPoints(5);
+        service.updateScore(matchScore, firstPlayerId);
+        assertEquals(0, scoreFirst.getPoints());
+        assertEquals(0, scoreSecond.getPoints());
+        assertEquals(0, scoreFirst.getGames());
+        assertEquals(0, scoreSecond.getGames());
+        assertFalse(scoreFirst.isTieBreak());
+        assertFalse(scoreSecond.isTieBreak());
+        assertEquals(1, scoreFirst.getSets());
     }
 
 }
